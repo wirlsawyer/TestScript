@@ -1,0 +1,19 @@
+adb shell pm list packages -f
+adb shell pm dump PACKAGE_NAME | grep -A 1 MAIN
+
+adb shell pm dump com.asus.robotgallery | grep -A 1 MAIN
+
+[計算機]
+am start -n com.asus.robot.calculator/com.asus.robot.calculator.launch.LaunchActivity
+am start -n com.asus.robotgallery/com.cooliris.media.Gallery
+啟動
+am start -n com.asus.robot.calculator/.launch.LaunchActivity
+關閉
+adb shell am force-stop com.asus.robot.calculator
+執行
+sh ./sdcard/ATST/Scripts/MTBF-A011_Calculator
+安裝
+adb push G:\Zenbo_Stability_MTBF\Scripts\MTBF-A011_Calculator /sdcard/ATST/Scripts/MTBF-A011_Calculator
+
+1 計算機  171, 104, 1217, 223
+2 單位換算 171, 247, 1217, 366
