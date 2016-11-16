@@ -1,0 +1,164 @@
+#!/bin/bash
+#================================================
+#               Local Variables
+#================================================
+Section="MTBF-A005_Album"
+
+event1_name="Jay Chou"
+event2_name="Pause"
+event3_name="Play"
+event4_name="Go back"
+
+
+
+event1_tcid="MTBF-A005.1"
+event2_tcid="MTBF-A005.2"
+event3_tcid="MTBF-A005.3"
+event4_tcid="MTBF-A005.4"
+
+
+
+
+CompareRetry=5
+PeopleVoicePath="/sdcard/ATST/Xml/PeopleVoice.xml"
+ZenboVoicePath="/sdcard/ATST/Xml/ZenboVoice.xml"
+
+
+Func_Prepare()
+{
+#---------------Prerequisite---------------------
+	source /sdcard/ATST/Core/ATST.Variables
+	source /sdcard/ATST/Scripts/VariableSettings
+	source /sdcard/ATST/Core/ATST.Functions
+	am startservice --user 0 -n com.asus.at/.MainService -a RegisterListen
+	
+	am startservice --user 0 -n com.asus.at/.MainService -a EnableDebugCsr -e AudioPath ""
+	WaitForResult
+	if [ "$APIResult" == "true" ] ; then
+		WriteLog_Info "Enable debug Csr mode Success!" "Action"
+		sleep 1
+	else
+		WriteLog_Info "Enable debug Csr mode Fail!" "Action"
+	fi		
+}
+
+Func_PeopleSpeak()
+{
+	am startservice --user 0 -n com.asus.at/.MainService -a DeleteAudioSource
+	sleep 1
+	am startservice --user 0 -n com.asus.at/.MainService -a SetAudioSource -e XmlFile $PeopleVoicePath -e ID $1
+	sleep 1
+	am startservice --user 0 -n com.asus.at/.MainService -a TriggerListen
+	sleep 1
+
+	i=1
+	while [ $i -le $CompareRetry ]
+	do
+		WriteLog_Info "Compare Zenbo received voice content" "Action"
+		am startservice --user 0 -n com.asus.at/.MainService -a PeopleVoiceContentCompare -e XmlFile $PeopleVoicePath -e ID $1
+		WaitForResult
+		if [ "$APIResult" == "true" ] ; then
+			WriteLog_Info "Sentence matched!" "Action"
+			am startservice --user 0 -n com.asus.at/.MainService -a DeleteAudioSource
+			break;
+		fi
+		sleep 1
+		i=$(($i+1))
+	done
+}
+
+CompareRetry()
+{
+	result="Fail"
+	CRetry=1
+	while [ $CRetry -le $CompareRetry ]
+	do
+		WriteLog_Info "Compare Zenbo received voice content ID:$1" "Action"
+		am startservice --user 0 -n com.asus.at/.MainService -a PeopleVoiceContentCompare -e XmlFile $PeopleVoicePath -e ID $1
+		WaitForResult
+		if [ "$APIResult" == "true" ] ; then
+			am startservice --user 0 -n com.asus.at/.MainService -a DeleteAudioSource
+			WriteLog_Info "Sentence matched!" "Action"
+			result="Pass"
+			break
+		fi
+		sleep 1
+		CRetry=$(($CRetry+1))
+	done
+	am startservice --user 0 -n com.asus.at/.MainService -a DeleteAudioSource
+}
+
+SpeakContentCompareRetry()
+{
+	result="Fail"
+	CRetry=1
+	while [ $CRetry -le $CompareRetry ]
+	do
+		WriteLog_Info "Compare Zenbo Speak content" "Action"
+		am startservice --user 0 -n com.asus.at/.MainService -a SpeakContentCompare -e XmlFile $ZenboVoicePath -e ID $1
+		WaitForResult
+		if [ "$APIResult" == "true" ] ; then
+			WriteLog_Info "Sentence matched!" "Action"
+			result="Pass"
+			break;
+		fi
+		sleep 3
+		CRetry=$(($CRetry+1))
+	done
+}
+
+#================================================
+#               Section Execution
+#================================================
+#---------------Prerequisite---------------------
+#Func_Prepare;
+WriteLog_StartSection "MTBF-A005_Album_Test"
+loop=1
+MTBF_A005_LOOP=1
+
+while [ $loop -le $MTBF_A005_LOOP ]
+do
+########################################################
+WriteLog_StartEvent "$event1_name" "$event1_tcid"
+#-------------------------------------------------------
+Func_PeopleSpeak "MTBF-A005-001"
+# check
+CompareRetry "MTBF-A005-001"
+#-------------------------------------------------------
+WriteLog_CheckPoint "$event1_name" "$result"
+WriteLog_EndEvent
+########################################################
+WriteLog_StartEvent "$event2_name" "$event2_tcid"
+#-------------------------------------------------------
+Func_PeopleSpeak "MTBF-A005-002"
+# check
+CompareRetry "MTBF-A005-002"
+#-------------------------------------------------------
+WriteLog_CheckPoint "$event2_name" "$result"
+WriteLog_EndEvent
+########################################################
+WriteLog_StartEvent "$event3_name" "$event3_tcid"
+#-------------------------------------------------------
+Func_PeopleSpeak "MTBF-A005-003"
+# check
+CompareRetry "MTBF-A005-003"
+#-------------------------------------------------------
+WriteLog_CheckPoint "$event3_name" "$result"
+WriteLog_EndEvent
+########################################################
+WriteLog_StartEvent "$event4_name" "$event4_tcid"
+#-------------------------------------------------------
+Func_PeopleSpeak "MTBF-A005-004"
+# check
+CompareRetry "MTBF-A005-004"
+#-------------------------------------------------------
+WriteLog_CheckPoint "$event4_name" "$result"
+WriteLog_EndEvent
+########################################################
+# force close app
+am force-stop com.asus.robotgallery
+########################################################
+	loop=$(($loop+1))
+done
+WriteLog_EndSection
+# am startservice --user 0 -n com.asus.at/.MainService -a DisableDebugCsr

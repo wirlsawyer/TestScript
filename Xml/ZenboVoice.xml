@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><Zenbo_Voice_Mapping_Table>
+  <ZenboVoice>
+	
+	<Voice Name1="周杰倫的影片">
+		<ID>MTBF-A005-001</ID>		
+	</Voice> 	
+  	<Voice Name1="暫停">
+		<ID>MTBF-A005-002</ID>		
+	</Voice>
+	<Voice Name1="播放">
+		<ID>MTBF-A005-003</ID>		
+	</Voice>
+  	<Voice Name1="返回">
+		<ID>MTBF-A005-004</ID>		
+	</Voice>  
+	<Voice Name1="麻煩上一頁">
+		<ID>MTBF-A006-003</ID>		
+	</Voice>
+	<Voice Name1="麻煩下一頁">
+		<ID>MTBF-A006-004</ID>		
+	</Voice>
+	<Voice Name1="請幫我重新載入">
+		<ID>MTBF-A006-005</ID>		
+	</Voice>
+	<Voice Name1="再大一點">
+		<ID>MTBF-A006-006</ID>	
+	</Voice>
+	<Voice Name1="往下">
+		<ID>MTBF-A006-007</ID>		
+	</Voice>	
+	<Voice Name1="1號" Name2="1 號">
+		<ID>MTBF-A007-002</ID>		
+	</Voice>
+	<Voice Name1="4號" Name2="4 號">
+		<ID>MTBF-A007-003</ID>		
+	</Voice>
+	<Voice Name1="是 2" Name2="算出來的結果是 2">
+		<ID>MTBF-A010-001</ID>
+	</Voice>
+	<Voice Name1="請告訴我，現在要幫你計算什麼?" Name2="請問你要算甚麼?">
+		<ID>MTBF-A010-002</ID>
+	</Voice>	
+	<Voice Name1="是 0" Name2="算出來的結果是0">
+		<ID>MTBF-A010-003</ID>
+	</Voice>	
+	<Voice Name1="是 3" Name2="算出來的結果是3">
+		<ID>MTBF-A010-004</ID>
+	</Voice>			
+	<Voice Name1="1公斤等於2.20462262184878磅">
+		<ID>MTBF-A011-001</ID>
+	</Voice>	
+	<Voice Name1="1平方公尺等於0.3025坪">
+		<ID>MTBF-A011-002</ID>
+	</Voice>
+	
+	
+	
+  </ZenboVoice>
+</Zenbo_Voice_Mapping_Table>

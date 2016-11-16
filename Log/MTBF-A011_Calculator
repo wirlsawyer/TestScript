@@ -1,0 +1,177 @@
+#!/bin/bash
+#================================================
+#               Local Variables
+#================================================
+Section="MTBF-A011_Calculator"
+
+event1_name="Kg to Lb"
+event2_name="convert area"
+event3_name="end"
+
+
+event1_tcid="MTBF-A011.1"
+event2_tcid="MTBF-A011.2"
+event3_tcid="MTBF-A011.3"
+
+
+
+CompareRetry=5
+PeopleVoicePath="/sdcard/ATST/Xml/PeopleVoice.xml"
+ZenboVoicePath="/sdcard/ATST/Xml/ZenboVoice.xml"
+
+
+Func_Prepare()
+{
+#---------------Prerequisite---------------------
+	source /sdcard/ATST/Core/ATST.Variables
+	source /sdcard/ATST/Scripts/VariableSettings
+	source /sdcard/ATST/Core/ATST.Functions
+	am startservice --user 0 -n com.asus.at/.MainService -a RegisterListen
+	
+	am startservice --user 0 -n com.asus.at/.MainService -a EnableDebugCsr -e AudioPath ""
+	WaitForResult
+	if [ "$APIResult" == "true" ] ; then
+		WriteLog_Info "Enable debug Csr mode Success!" "Action"
+		sleep 1
+	else
+		WriteLog_Info "Enable debug Csr mode Fail!" "Action"
+	fi		
+}
+
+Func_PeopleSpeak()
+{
+	am startservice --user 0 -n com.asus.at/.MainService -a DeleteAudioSource
+	sleep 1
+	am startservice --user 0 -n com.asus.at/.MainService -a SetAudioSource -e XmlFile $PeopleVoicePath -e ID $1
+	sleep 1
+	am startservice --user 0 -n com.asus.at/.MainService -a TriggerListen
+	sleep 1
+
+	i=1
+	while [ $i -le $CompareRetry ]
+	do
+		WriteLog_Info "Compare Zenbo received voice content" "Action"
+		am startservice --user 0 -n com.asus.at/.MainService -a PeopleVoiceContentCompare -e XmlFile $PeopleVoicePath -e ID $1
+		WaitForResult
+		if [ "$APIResult" == "true" ] ; then
+			WriteLog_Info "Sentence matched!" "Action"
+			am startservice --user 0 -n com.asus.at/.MainService -a DeleteAudioSource
+			break;
+		fi
+		sleep 1
+		i=$(($i+1))
+	done
+}
+
+CompareRetry()
+{
+	result="Fail"
+	CRetry=1
+	while [ $CRetry -le $CompareRetry ]
+	do
+		WriteLog_Info "Compare Zenbo received voice content ID:$1" "Action"
+		am startservice --user 0 -n com.asus.at/.MainService -a PeopleVoiceContentCompare -e XmlFile $PeopleVoicePath -e ID $1
+		WaitForResult
+		if [ "$APIResult" == "true" ] ; then
+			am startservice --user 0 -n com.asus.at/.MainService -a DeleteAudioSource
+			WriteLog_Info "Sentence matched!" "Action"
+			result="Pass"
+			break
+		fi
+		sleep 1
+		CRetry=$(($CRetry+1))
+	done
+	am startservice --user 0 -n com.asus.at/.MainService -a DeleteAudioSource
+}
+
+SpeakContentCompareRetry()
+{
+	result="Fail"
+	CRetry=1
+	while [ $CRetry -le $CompareRetry ]
+	do
+		WriteLog_Info "Compare Zenbo Speak content" "Action"
+		am startservice --user 0 -n com.asus.at/.MainService -a SpeakContentCompare -e XmlFile $ZenboVoicePath -e ID $1
+		WaitForResult
+		if [ "$APIResult" == "true" ] ; then
+			WriteLog_Info "Sentence matched!" "Action"
+			result="Pass"
+			break;
+		fi
+		sleep 3
+		CRetry=$(($CRetry+1))
+	done
+}
+
+#================================================
+#               Section Execution
+#================================================
+#---------------Prerequisite---------------------
+Func_Prepare;
+WriteLog_StartSection "MTBF-A011_Calculator_Test"
+loop=1
+MTBF_A011_LOOP=1
+
+while [ $loop -le $MTBF_A011_LOOP ]
+do
+########################################################
+WriteLog_StartEvent "$event1_name" "$event1_tcid"
+#-------------------------------------------------------
+echo ----------------------------------
+echo [1kg to 1lb]
+echo ----------------------------------
+Func_PeopleSpeak "MTBF-A011-001"
+# check
+sleep 1
+SpeakContentCompareRetry "MTBF-A011-001"
+echo ----------------------------------
+echo [result:$result]
+echo ----------------------------------
+#-------------------------------------------------------
+WriteLog_CheckPoint "$event1_name" "$result"
+WriteLog_EndEvent
+########################################################
+WriteLog_StartEvent "$event2_name" "$event2_tcid"
+#-------------------------------------------------------
+echo ----------------------------------
+echo [Convert area]
+echo ----------------------------------
+Func_PeopleSpeak "MTBF-A011-002"
+# check
+sleep 1
+SpeakContentCompareRetry "MTBF-A011-002"
+echo ----------------------------------
+echo [result:$result]
+echo ----------------------------------
+#-------------------------------------------------------
+WriteLog_CheckPoint "$event2_name" "$result"
+WriteLog_EndEvent
+########################################################
+WriteLog_StartEvent "$event3_name" "$event3_tcid"
+#-------------------------------------------------------
+echo ----------------------------------
+echo [Close Activity]
+echo ----------------------------------
+Func_PeopleSpeak "MTBF-A011-003"
+# check
+CheckTopActivity "com.asus.robot.calculator/.launch.LaunchActivity" "3"
+#WaitForResult
+if [ "$APIResult" == "true" ] ; then
+	result="Fail"	
+else
+	result="Pass"	
+fi
+echo ----------------------------------
+echo [result:$result]
+echo ----------------------------------
+#-------------------------------------------------------
+WriteLog_CheckPoint "$event3_name" "$result"
+WriteLog_EndEvent
+########################################################
+# force close app
+am force-stop com.asus.robot.calculator
+########################################################
+	loop=$(($loop+1))
+done
+WriteLog_EndSection
+# am startservice --user 0 -n com.asus.at/.MainService -a DisableDebugCsr

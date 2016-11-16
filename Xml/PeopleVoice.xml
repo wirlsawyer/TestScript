@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><People_Voice_Mapping_Table>
+  <PeopleVoice>
+	<MainPath>/sdcard/ATST/PeopleAudios</MainPath>
+	
+	<Voice Name1="周杰倫的影片">
+		<ID>MTBF-A005-001</ID>
+		<VoiceFileName>empty.pcm</VoiceFileName>
+	</Voice> 	
+  	<Voice Name1="暫停">
+		<ID>MTBF-A005-002</ID>
+		<VoiceFileName>20161018_162026_105.pcm</VoiceFileName>
+	</Voice>
+	<Voice Name1="播放">
+		<ID>MTBF-A005-003</ID>
+		<VoiceFileName>20161018_162101_883.pcm</VoiceFileName>
+	</Voice>
+  	<Voice Name1="返回">
+		<ID>MTBF-A005-004</ID>
+		<VoiceFileName>20161018_190444_263.pcm</VoiceFileName>
+	</Voice>  
+	<Voice Name1="麻煩上一頁">
+		<ID>MTBF-A006-003</ID>
+		<VoiceFileName>20161018_164041_652.pcm</VoiceFileName>
+	</Voice>
+	<Voice Name1="麻煩下一頁">
+		<ID>MTBF-A006-004</ID>
+		<VoiceFileName>20161018_164158_489.pcm</VoiceFileName>
+	</Voice>
+	<Voice Name1="請幫我重新載入">
+		<ID>MTBF-A006-005</ID>
+		<VoiceFileName>20161018_164222_561.pcm</VoiceFileName>
+	</Voice>
+	<Voice Name1="再大一點">
+		<ID>MTBF-A006-006</ID>
+		<VoiceFileName>20161018_164724_524.pcm</VoiceFileName>
+	</Voice>
+	<Voice Name1="往下">
+		<ID>MTBF-A006-007</ID>
+		<VoiceFileName>20161018_164909_958.pcm</VoiceFileName>
+	</Voice>
+	<Voice Name1="1號" Name2="1 號">
+		<ID>MTBF-A007-002</ID>
+		<VoiceFileName>20161020_161306_149.pcm</VoiceFileName>
+	</Voice>
+	<Voice Name1="4號" Name2="4 號">
+		<ID>MTBF-A007-003</ID>
+		<VoiceFileName>20161020_162301_005.pcm</VoiceFileName>
+	</Voice>	
+	<Voice Name1="你知不知道1+1等於多少">
+		<ID>MTBF-A010-001</ID>
+		<VoiceFileName>20161018_184835_476.pcm</VoiceFileName>
+	</Voice>
+	<Voice Name1="重新計算">
+		<ID>MTBF-A010-002</ID>
+		<VoiceFileName>20161018_185002_828.pcm</VoiceFileName>
+	</Voice>
+	<Voice Name1="幫我算1+2-3">
+		<ID>MTBF-A010-003</ID>
+		<VoiceFileName>empty.pcm</VoiceFileName>
+	</Voice>	
+	<Voice Name1="4*6/8等於多少">
+		<ID>MTBF-A010-004</ID>
+		<VoiceFileName>empty.pcm</VoiceFileName>
+	</Voice>
+	<Voice Name1="結束">
+		<ID>MTBF-A010-005</ID>
+		<VoiceFileName>20161019_194500_184.pcm</VoiceFileName>
+	</Voice>
+	<Voice Name1="1公斤等於多少磅?">
+		<ID>MTBF-A011-001</ID>
+		<VoiceFileName>20161018_192732_886.pcm</VoiceFileName>
+	</Voice>
+	<Voice Name1="1平方公尺等於多少坪">
+		<ID>MTBF-A011-002</ID>
+		<VoiceFileName>20161101_002330_610.pcm</VoiceFileName>
+	</Voice>	
+	<Voice Name1="結束">
+		<ID>MTBF-A011-003</ID>
+		<VoiceFileName>20161019_194500_184.pcm</VoiceFileName>
+	</Voice>
+	
+  </PeopleVoice>
+</People_Voice_Mapping_Table>
